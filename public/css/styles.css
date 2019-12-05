@@ -191,6 +191,15 @@ footer .footer-contents {
   }
 }
 
+.row {
+  width: 100%;
+  text-align: left;
+}
+
+.block {
+  display: inline-block;
+}​
+
 /* Tank Options */
 #sketch-holder
 {

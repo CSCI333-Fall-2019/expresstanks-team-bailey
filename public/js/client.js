@@ -10,6 +10,7 @@ var oldTankx, oldTanky, oldTankHeading;
 var fps = 60; // Frames per second
 var PlayerName = "";
 var DEBUG = 0;
+var loopCount = 0.0;
 
 // Initial Setup
 function setup() {
@@ -45,12 +46,29 @@ function setup() {
   socket.on('ServerResetAll', ServerResetAll);
   socket.on('ServerMoveShot', ServerMoveShot);
   socket.on('ServerNewShot', ServerNewShot);
+  socket.on('ServerScoreUpdate', ServerScoreUpdate);
 
   // Join (or start) a new game
   socket.on('connect', function(data) {
     socketID = socket.io.engine.id;
     socket.emit('ClientNewJoin', socketID);
   });
+}
+
+function divBuilder(name, score) {
+  var tankName = document.createElement("div");
+  tankName.setAttribute("class", "name");
+  tankName.appendChild(document.createTextNode(name));
+
+  var tankScore = document.createElement("div");
+  tankScore.setAttribute("class", "score");
+  tankScore.appendChild(document.createTextNode(score));
+
+  var scoreRow = document.createElement("div");
+  scoreRow.appendChild(tankName);
+  scoreRow.appendChild(tankScore);
+  scoreRow.setAttribute("class", "scoreRow");
+  document.getElementById('container').appendChild(scoreRow);
 }
   
 // Draw the screen and process the position updates
@@ -209,11 +227,25 @@ function draw() {
           tankFound = false;
         }
       }
-  
+
+      let scores = [];
+      scores = tanks.slice(); // copy tanks array into scores array
+
+      scores.sort(function(a, b){return a.score - b.score}); // sort tanks by score
+
+      const myNode = document.getElementById("container");
+      while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+      }
+
+      // builds scoreboard divs
+      for (var i = 0; i < scores.length; i++) {
+        divBuilder(scores[i].playerName, scores[i].score);
+      }
     }
 
     function ServerTankRemove(socketid) {
-//      console.log('Remove Tank: ' + socketid);
+      console.log('Remove Tank: ' + socketid);
 
       if(!tanks || myTankIndex < 0)
       return;
@@ -223,6 +255,38 @@ function draw() {
           tanks[i].destroyed = true;
           return;
         }
+      }
+    }
+
+    function ServerScoreUpdate(socketid) {
+      //console.log('Increase tank score: ' + socketid);
+
+      if (!tanks || myTankIndex < 0)
+      return;
+
+      // find tank that shot and increase score
+      for (var j = tanks.length - 1; j >= 0; j--) {
+        if (tanks[j].tankid == socketid) {
+          tanks[j].score += 10;
+          break;
+        }
+      }
+
+      let scores = [];
+      scores = tanks.slice(); // copy tanks array into scores array
+
+      scores.sort(function(a, b){return a.score - b.score}); // sort tanks by score asc
+
+      scores.reverse(); // sort by descending order
+
+      const myNode = document.getElementById("container");
+      while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+      }
+
+      // update scoreboard
+      for (var i = 0; i < scores.length; i++) {
+        divBuilder(scores[i].playerName, scores[i].score);
       }
     }
 

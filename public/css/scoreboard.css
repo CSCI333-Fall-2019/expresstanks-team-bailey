@@ -1,0 +1,53 @@
+#container {
+    width: 250px;
+    height: auto;
+}
+  
+/* horizontal div alignment */
+.scoreRow {
+    width:100%;
+    text-align: left;
+    position: relative;
+    display: block;
+    height: 40px;
+    border-bottom: 1px solid #AFAFAF;
+    background: white;
+}
+
+.block {
+    vertical-align: top;
+    display: inline-block;
+}
+  
+.name {
+    position: relative;
+    display: inline-block;
+    width: 75%;
+    line-height: 45px;
+    text-indent: 10px;
+    color: black;
+}
+  
+.score {
+    position: relative;
+    display: inline-block;
+    width: 25%;
+    text-indent: 25px;
+    color: black;
+}
+  
+.scoreRow:nth-child(1) {
+    background: gold;
+}
+  
+.scoreRow:nth-child(2) {
+    background: #c0c0c0;
+}
+  
+.scoreRow:nth-child(3) {
+    background: #cd7f32;
+}
+
+.scoreRow:default() {
+    background: white;
+}

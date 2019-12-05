@@ -216,6 +216,7 @@ io.sockets.on('connection',
               // It was a hit, remove the tank and shot
               // and tell everyone else its gone too
               io.sockets.emit('ServerTankRemove', tanks[t].tankid);
+              io.sockets.emit('ServerScoreUpdate', shots[i].tankid); // add score to killer
               tanks.splice(t,1);
               shots.splice(i, 1);
               // just return for now to keep from unknown errors

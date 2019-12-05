@@ -24,6 +24,7 @@ function Shot(shotid, tankid, spos, angle, color) {
     this.hits = function(enemyTank) {
       var d = dist(this.pos.x, this.pos.y, enemyTank.pos.x, enemyTank.pos.y);
       if (d < enemyTank.r) {
+        // this.score++;??
         return true;
       } else {
         return false;

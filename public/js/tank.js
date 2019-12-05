@@ -14,6 +14,7 @@ function Tank(startPos, tankColor, newtankid, playerName) {
     this.tankColor = tankColor;
     this.tankid = newtankid;
     this.playerName = playerName;
+    this.score = 0;
 
     // For an optional boost feature
     this.boosting = function(b) {
